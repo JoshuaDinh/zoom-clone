@@ -70,3 +70,32 @@ video {
 .leave-meeting {
   color: red;
 }
+
+/* Chat */
+
+.main-right {
+  display: flex;
+  flex-direction: column;
+  background: rgb(36, 35, 34);
+}
+
+.main-header {
+  color: #f5f5f5;
+  text-align: center;
+}
+
+.main-chat-window {
+  flex-grow: 1;
+}
+
+.main-message-container {
+  display: flex;
+  padding: 22px 12px;
+}
+
+.main-message-container > input {
+  flex-grow: 1;
+  border: none;
+  background: transparent;
+  padding: 15px;
+}

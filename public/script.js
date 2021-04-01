@@ -64,3 +64,14 @@ const connectToNewUser = (userId, stream) => {
   });
   peers[userId] = call;
 };
+
+const input = document.getElementById("chat-message");
+const message = document.getElementById("values");
+
+input.addEventListener("input", updateValue);
+
+const updateValue = (e) => {
+  message.textContent = e.target.value;
+};
+
+console.log(message);

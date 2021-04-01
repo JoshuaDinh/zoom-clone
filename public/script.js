@@ -1,53 +1,47 @@
 const socket = io("/");
-
 const videoGrid = document.getElementById("video-grid");
-const myVideo = document.createElement("video");
-myVideo.muted = true;
 
-var peer = new Peer(undefined, {
-  path: "/peerjs",
-  host: "/",
-  port: "3000",
+const peer = new Peer(undefined, {
+  host: "localhost",
+  port: "3001",
+  path: "/",
 });
 
-// Get access to to video/audio
-let myVideoStream;
+const myVideo = document.createElement("video");
+myVideo.muted = true;
+const peers = {};
+
 navigator.mediaDevices
   .getUserMedia({
     video: true,
     audio: true,
   })
   .then((stream) => {
-    myVideoStream = stream;
     addVideoStream(myVideo, stream);
 
     peer.on("call", (call) => {
-      call.awnser(stream);
+      call.answer(stream);
       const video = document.createElement("video");
-      call.om("stream", (userVideoStream) => {
-        addVideoStream(video, userVideoStream);
+      call.on("stream", (userVideoStream) => {
+        addVideoStream(video, stream);
       });
+    });
+
+    socket.on("user-connected", (userId) => {
+      connectToNewUser(userId, stream);
     });
   });
 
-socket.on("user-connected", (userId, stream) => {
-  connectToNewUser(userId, stream);
+//   Removes Video of user when they leave the room
+socket.on("user-disconnected", (userId) => {
+  if (peers[userId]) {
+    peers[userId].close();
+  }
 });
 
 peer.on("open", (id) => {
   socket.emit("join-room", ROOM_ID, id);
 });
-
-socket.emit("join-room", ROOM_ID);
-
-// Communicates streams and creates a new video
-const connectToNewUser = (userId, stream) => {
-  const call = peer.call(userId, stream);
-  const video = document.createElement("video");
-  call.on("stream", (userVideoStream) => {
-    addVideoStream(video, userVideoStream);
-  });
-};
 
 // Creates video stream / visual media & audio
 const addVideoStream = (video, stream) => {
@@ -56,4 +50,16 @@ const addVideoStream = (video, stream) => {
     video.play();
   });
   videoGrid.append(video);
+};
+
+const connectToNewUser = (userId, stream) => {
+  const call = peer.call(userId, stream);
+  const video = document.createElement("video");
+  call.on("stream", (userVideoStream) => {
+    addVideoStream(video, userVideoStream);
+  });
+  call.on("close", () => {
+    video.remove();
+  });
+  peers[userId] = call;
 };

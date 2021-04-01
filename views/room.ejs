@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://kit.fontawesome.com/6f020ea831.js" crossorigin="anonymous"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,24 +14,35 @@
     <!-- loads socket.io code to front end -->
     <script src="/socket.io/socket.io.js" defer></script>
     <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css"/>
     <title>Document</title>
 </head>
-<style>
-#video-grid {
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, 300px);
-    grid-auto-rows: 300px;
-}
 
-video {
-    width: 100%;
-    height: 100%; 
-    object-fit: cover
-}
-</style>
 <body>
-    <div id="video-grid">
+   
+    <div class="main">
+        <div class="main-left">
+            <div class="main-videos">
+                <div id="video-grid">
 
+                </div>
+            </div>
+            <div class="main-controls">
+                <div class="main-controls-block">
+                    <div class="main-controls-button">
+                        <i class="fas fa-microphone"></i>
+                        <span>Mute</span>
+                    </div>
+                    <div class="main-controls-button">
+                        <i class="fas fa-video"></i>
+                        <span>Stop Video</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main-right">
+            <div class="main-header"><h6>Chat</h6></div>
+        </div>
     </div>
 </body>
 </html>
